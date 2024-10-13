@@ -16,6 +16,7 @@ const {
   unbannedUserById,
   updateUserRole,
   bulkCreateUser,
+  allUsersCount,
 } = require("../controllers/user.controllers");
 const { userMulter } = require("../utils/multer");
 
@@ -37,6 +38,8 @@ userRouter
 
 // update user password
 userRouter.route("/password-update").patch(isLoggedIn,updateUserPassword);
+
+userRouter.route("/all-lenght").get(allUsersCount)
 
 
 // bulk create user

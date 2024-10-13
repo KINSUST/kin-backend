@@ -735,6 +735,40 @@ const bulkCreateUser = asyncHandler(async (req, res) => {
   });
 });
 
+// count all users
+const allUsersCount = asyncHandler(async (req, res) => {
+ 
+
+
+
+  // find users
+  const { count, rows: users } = await User.findAndCountAll();
+
+ 
+  // user check
+  if (!users.length) throw createError(404, "Couldn't find any data!");
+
+  // length
+  const data={
+    total : users?.length,
+    superAdmin: users?.filter(dt=>dt?.role === "superAdmin")?.length,
+    admin: users?.filter(dt=>dt?.role === "admin")?.length
+  }
+
+  
+
+
+  // success response send
+  successResponse(res, {
+    statusCode: 200,
+    message: "Users Data Fetched Successfully.",
+    payload: {
+      data
+    },
+  });
+});
+
+
 module.exports = {
   allUsers,
   addUser,
@@ -749,6 +783,7 @@ module.exports = {
   updateUserRole,
   bulkCreateUser,
   updateUserPassword,
+  allUsersCount
 };
 
 // reset password by URL
@@ -868,3 +903,5 @@ const BulkDeleteUserByIds = asyncHandler(async (req, res) => {
     },
   });
 });
+
+
