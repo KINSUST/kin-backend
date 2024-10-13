@@ -11,6 +11,7 @@ const {
 } = require("../services/responseHandler");
 const sendAccountVerifyMail = require("../utils/email/accountActivationMail");
 const matchPassword = require("../helper/matchPassword");
+const { isLoggedIn } = require("../middlewares/verify");
 
 /**
  *
@@ -345,22 +346,46 @@ const userLogout = (req, res) => {
  *
  */
 const me = asyncHandler(async (req, res) => {
-  if (!req?.me) {
+
+  const token = req?.cookies?.accessToken;
+
+  if (!token) {
     return successResponse(res, {
-      statusCode: 200,
-      message: "User is not register.",
+      statusCode: 301,
+      message: "Token not found.",
       payload: {
         data: null,
       },
     });
   }
-  successResponse(res, {
-    statusCode: 200,
-    message: "Login User Data.",
-    payload: {
-      data: req.me,
-    },
+
+  jwt.verify(token, process.env.JWT_LOGIN_SECRET_KEY, async (err, decode) => {
+    if (err) {
+      return successResponse(res, {
+        statusCode: 200,
+        message: "Unauthorized, Invalid access token.Please login again",
+        payload: {
+          data: null,
+        },
+      });
+    }
+    const loginUser = await User.findOne({
+      where: { email: decode.email },
+    });
+
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "Login User Data.",
+      payload: {
+        data: loginUser,
+      },
+    });
+
   });
+  
+
+
 });
 
 /**
