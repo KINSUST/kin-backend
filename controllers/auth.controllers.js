@@ -346,7 +346,13 @@ const userLogout = (req, res) => {
  */
 const me = asyncHandler(async (req, res) => {
   if (!req?.me) {
-    throw createError(404, "Couldn't find any user account!. Please register.");
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User is not register.",
+      payload: {
+        data: null,
+      },
+    });
   }
   successResponse(res, {
     statusCode: 200,

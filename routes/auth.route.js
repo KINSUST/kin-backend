@@ -58,6 +58,6 @@ authRouter.route("/logout").post(isLoggedIn, userLogout);
 //   .post(isLoggedOut, passwordResetValidator, runValidation, passwordReset);
 
 // logged in user
-authRouter.route("/me").get(isLoggedIn, me);
+authRouter.route("/me").get(me);
 
 module.exports = authRouter;
