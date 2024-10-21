@@ -289,7 +289,7 @@ const userLogin = asyncHandler(async (req, res) => {
   // response send
   res.cookie("accessToken", accessToken, {
     httpOnly: false,
-    maxAge: 1000 * 60 * 60 * 24 * 15, // 15 days
+    maxAge: 1000 * 60 * 60 * 24 * 365, // 15 days
     secure: true, // only https
     sameSite: "none",
   });
@@ -353,10 +353,9 @@ const me = asyncHandler(async (req, res) => {
     return successResponse(res, {
       statusCode: 301,
       message: "Token not found.",
-      payload: {
-        data: null,
-      },
+      payload: null,
     });
+  
   }
 
   jwt.verify(token, process.env.JWT_LOGIN_SECRET_KEY, async (err, decode) => {
@@ -364,15 +363,14 @@ const me = asyncHandler(async (req, res) => {
       return successResponse(res, {
         statusCode: 200,
         message: "Unauthorized, Invalid access token.Please login again",
-        payload: {
-          data: null,
-        },
+        payload: null,
       });
     }
     const loginUser = await User.findOne({
       where: { email: decode.email },
     });
 
+ 
 
     return successResponse(res, {
       statusCode: 200,

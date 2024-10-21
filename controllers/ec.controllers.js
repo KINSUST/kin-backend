@@ -23,6 +23,7 @@ const getAllEc = asyncHandler(async (req, res) => {
   // ec data find
   let ec = await EC.findAll({
     include: "members",
+    order:[["year","DESC"]]
   });
 
   // if no data found
@@ -248,7 +249,7 @@ const addMemberInEc = asyncHandler(async (req, res) => {
   // association data
   const ec = await ECMember.create(req.body);
 
-  console.log(ec.dataValues.id);
+
 
   // updated data
   // updated data

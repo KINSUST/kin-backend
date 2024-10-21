@@ -55,7 +55,7 @@ const allUsers = asyncHandler(async (req, res) => {
     limit: queries.limit,
   });
 
-  console.log(users);
+
   // user check
   if (!users.length) throw createError(404, "Couldn't find any data!");
 
